@@ -8,15 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Main {
+public class Connect {
 
-    public static void main(String[] args) throws Exception {
-        connectAndRead("https://www.fflogs.com/reports/HLJTkcP7RY3znXNF");
-        connectAndRead("https://www.fflogs.com/reports/mf84twZHjxhvzb7q");
-
-    }
-
-    private static void connectAndRead(String log) {
+    public static List<Fight> connectAndRead(String log) {
         System.setProperty("webdriver.chrome.driver", "ChromeDriver/chromedriver");
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -44,7 +38,8 @@ public class Main {
                 continue;
             }
             // there will only be a max of 2 tables. if size == 1, check if its only clears or only wipes.
-            if (getClearWipeTable.size() == 1 && (getFight.getText().contains("Kill") || getFight.getText().contains("Kills"))) {
+            if (getClearWipeTable.size() == 1 && (getFight.getText().contains("Kill") ||
+                    getFight.getText().contains("Kills"))) {
                 getClearWipeTable.clear();
                 continue;
             }
@@ -68,11 +63,12 @@ public class Main {
         }
 
         // debug, printing all fights
-        for (Fight allFight : allFights) {
-            System.out.println(allFight.toString());
-        }
+//        for (Fight allFight : allFights) {
+//            System.out.println(allFight.toString());
+//        }
 
         driver.quit();
+        return allFights;
     }
 
 
