@@ -1,0 +1,4 @@
+    private String nameOfFight;
+    private boolean isClear;
+    private String timeLength;
+    private int damagePercent;

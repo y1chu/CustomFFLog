@@ -2,74 +2,67 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        connectAndRead("https://www.fflogs.com/reports/HLJTkcP7RY3znXNF");
+        connectAndRead("https://www.fflogs.com/reports/mf84twZHjxhvzb7q");
 
+    }
+
+    private static void connectAndRead(String log) {
         System.setProperty("webdriver.chrome.driver", "ChromeDriver/chromedriver");
         WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().minimize();
 
-        // https://www.fflogs.com/reports/HLJTkcP7RY3znXNF
-        // https://www.fflogs.com/reports/mf84twZHjxhvzb7q
-        driver.get("https://www.fflogs.com/reports/mf84twZHjxhvzb7q");
+        driver.get(log);
 
         List<WebElement> getFights = driver.findElements(By.className("report-overview-boss-box"));
         List<Fight> allFights = new ArrayList<>();
 
-        for (int i = 0; i < getFights.size(); i++) {
+        for (WebElement getFight : getFights) {
             String currentFightName;
-            int currentDamage = 0;
-
             // skip trash fights and all encounter element
-            if (getFights.get(i).getText().contains("Encounters") ||
-                    getFights.get(i).getText().contains("Trash Fights")) {
+            if (getFight.getText().contains("Encounters") ||
+                    getFight.getText().contains("Trash Fights")) {
                 continue;
             }
-            if (getFights.get(i).getText().contains("Show All")) {
-                getFights.get(i).findElement(By.className("fight-details-toggle-text")).click();
+            if (getFight.getText().contains("Show All")) {
+                getFight.findElement(By.className("fight-details-toggle-text")).click();
             }
 
-            // driver.findElements(By.className("wipes-table"));
-            List<WebElement> getClearWipeTable = getFights.get(i).findElements(By.className("wipes-table"));
-
-            // getClearWipeTable = getFights.get(i).findElements(By.className("wipes-table"));
+            List<WebElement> getClearWipeTable = getFight.findElements(By.className("wipes-table"));
             System.out.println(getClearWipeTable.size());
             if (getClearWipeTable.size() == 0) {
                 // means its a dungeon or 1 pull clear. ignore.
                 continue;
             }
             // there will only be a max of 2 tables. if size == 1, check if its only clears or only wipes.
-            if (getClearWipeTable.size() == 1 && (getFights.get(i).getText().contains("Wipe") || getFights.get(i).getText().contains("Wipes"))) {
-                System.out.println("this is a all Wipe run");
+            if (getClearWipeTable.size() == 1 && (getFight.getText().contains("Kill") || getFight.getText().contains("Kills"))) {
+                getClearWipeTable.clear();
+                continue;
             }
 
+            // the first table is clear, second is wipe. process clears first.
+            // this if is for only wipes
+            currentFightName = getFight.findElement(By.className("report-overview-boss-text")).getText();
+            if (getClearWipeTable.size() == 1 && (getFight.getText().contains("Wipe") || getFight.getText().contains("Wipes"))) {
+                allFights.addAll(processFight(currentFightName, getClearWipeTable.get(0), false));
 
 
-            currentFightName = getFights.get(i).findElement(By.className("report-overview-boss-text")).getText();
-            // //*[@id="report-overview-fights-contents"]/div[3]/a
+            } else {
+                // clears
+                allFights.addAll(processFight(currentFightName, getClearWipeTable.get(0), true));
+                // wipes
+                allFights.addAll(processFight(currentFightName, getClearWipeTable.get(1), false));
 
+            }
 
-            // System.out.println(currentURL);
-            // format: All Encounters (1 Kill, 5 Wipes)
-            // WebDriver driver, WebElement element, int delay
-            // waitUntilElementVisible(driver, getFights.get(i).findElement(By.xpath("//div[@class='all-fights-entry wipe']")), 30);
-            // String temp = getFights.get(i).findElement(By.xpath("//div[@class='all-fights-entry wipe']")).getText();
-            // System.out.println("Loop " + i + " " + getFights.get(i).getText() + "\n");
-            // System.out.println("the clear/wipe is " + temp);
-
-            Fight currentFight = new Fight(currentFightName, currentDamage);
-            allFights.add(currentFight);
             getClearWipeTable.clear();
         }
 
@@ -79,17 +72,32 @@ public class Main {
         }
 
         driver.quit();
-
-
     }
 
-    public static WebElement waitUntilElementVisible(WebDriver driver, WebElement element, int delay) {
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, delay);
-            return wait.until(ExpectedConditions.visibilityOf(element));
-        } catch (NoSuchElementException e) {
-            throw new RuntimeException("Web element not visible within given time" + element + " Time " + delay);
+
+    private static ArrayList<Fight> processFight(String fightName, WebElement getClearWipeTable, boolean hasCleared) {
+        ArrayList<Fight> toReturn = new ArrayList<>();
+        List<WebElement> processBlock = getClearWipeTable.findElements(By.className("wipes-entry"));
+
+        System.out.println("processBlock size " + processBlock.size());
+        for (WebElement webElement : processBlock) {
+            String timeLength = webElement.findElement(By.className("fight-grid-duration")).getText();
+
+            if (hasCleared) {
+                Fight currentFight = new Fight(fightName, true, timeLength, 100);
+                toReturn.add(currentFight);
+            } else {
+                WebElement progressElement = webElement.findElement(By.className("wipes-percent-bg"));
+                String progressBar = progressElement.findElement(By.className("wipes-percent-fg")).getAttribute("style");
+                int progressPercent = Integer.parseInt(progressElement.findElement
+                        (By.className("wipes-percent-fg")).getAttribute("style").substring(7, progressBar.indexOf("%")));
+                Fight currentFight = new Fight(fightName, false, timeLength, progressPercent);
+                toReturn.add(currentFight);
+            }
+
         }
+
+        return toReturn;
     }
 
 
