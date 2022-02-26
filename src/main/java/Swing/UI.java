@@ -28,6 +28,7 @@ public class UI extends JFrame {
                 midText.setText("Link is invalid! Please try again.");
             } else {
                 midText.setText("Connection success! Graphing now...");
+                System.out.println();
             }
 
         });

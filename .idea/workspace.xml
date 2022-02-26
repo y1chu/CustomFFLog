@@ -4,18 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd5c7420-b269-4893-a788-7de2cf6e4275" name="Default Changelist" comment="Get data from ffLogs success.">
-      <change afterPath="$PROJECT_DIR$/lib/miglayout-core-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/miglayout-core-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/miglayout-core.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/miglayout-swing-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/miglayout-swing-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/miglayout-swing.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Swing/UI.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Swing/UI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Calculation/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Calculation/Connect.java" afterDir="false" />
+    <list default="true" id="dd5c7420-b269-4893-a788-7de2cf6e4275" name="Default Changelist" comment="Added UI components.">
+      <change beforePath="$PROJECT_DIR$/src/main/java/Swing/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Swing/UI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +119,7 @@
       <workItem from="1645753105859" duration="27118000" />
       <workItem from="1645915307755" duration="65000" />
       <workItem from="1645915435214" duration="50000" />
-      <workItem from="1645915498813" duration="2470000" />
+      <workItem from="1645915498813" duration="2948000" />
     </task>
     <task id="LOCAL-00001" summary="Added Maven">
       <created>1645752995326</created>
@@ -152,7 +142,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645877127490</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added UI components.">
+      <created>1645918117762</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1645918117762</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,6 +172,7 @@
     <MESSAGE value="Added Maven" />
     <MESSAGE value="Progress..." />
     <MESSAGE value="Get data from ffLogs success." />
-    <option name="LAST_COMMIT_MESSAGE" value="Get data from ffLogs success." />
+    <MESSAGE value="Added UI components." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added UI components." />
   </component>
 </project>
