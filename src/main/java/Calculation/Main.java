@@ -1,3 +1,5 @@
+package Calculation;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -37,7 +39,6 @@ public class Main {
             }
 
             List<WebElement> getClearWipeTable = getFight.findElements(By.className("wipes-table"));
-            System.out.println(getClearWipeTable.size());
             if (getClearWipeTable.size() == 0) {
                 // means its a dungeon or 1 pull clear. ignore.
                 continue;
@@ -79,7 +80,6 @@ public class Main {
         ArrayList<Fight> toReturn = new ArrayList<>();
         List<WebElement> processBlock = getClearWipeTable.findElements(By.className("wipes-entry"));
 
-        System.out.println("processBlock size " + processBlock.size());
         for (WebElement webElement : processBlock) {
             String timeLength = webElement.findElement(By.className("fight-grid-duration")).getText();
 
@@ -89,8 +89,7 @@ public class Main {
             } else {
                 WebElement progressElement = webElement.findElement(By.className("wipes-percent-bg"));
                 String progressBar = progressElement.findElement(By.className("wipes-percent-fg")).getAttribute("style");
-                int progressPercent = Integer.parseInt(progressElement.findElement
-                        (By.className("wipes-percent-fg")).getAttribute("style").substring(7, progressBar.indexOf("%")));
+                int progressPercent = Integer.parseInt(progressBar.substring(7, progressBar.indexOf("%")));
                 Fight currentFight = new Fight(fightName, false, timeLength, progressPercent);
                 toReturn.add(currentFight);
             }
