@@ -1,2 +1,2 @@
 # CustomFFLogs (WIP)
- Gives a visual representation of how our team is doing.
+ Gives a visual representation of how our team is doing in FFXIV raid.
